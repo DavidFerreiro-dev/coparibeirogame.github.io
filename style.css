@@ -52,38 +52,6 @@ button:hover {
   background-color: #3993d8; /* Hover color de Instagram */
 }
 
-.attribution-container {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  font-size: 0.6rem; /* Texto más pequeño */
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.6); /* Fondo más oscuro y más transparente */
-  padding: 5px 10px; /* Menos espacio dentro del contenedor */
-  border-radius: 5px;
-  z-index: 1000;
-  text-align: right;
-  max-width: 300px; /* Limitar el ancho del contenedor */
-}
-
-.attribution-container a {
-  color: #e5c87d;
-  text-decoration: none;
-  display: block; /* Para mejor alineación en línea */
-}
-
-.attribution-container a:hover {
-  text-decoration: underline;
-}
-
-.attribution-container img {
-  vertical-align: middle;
-  height: 15px; /* Tamaño de las imágenes más pequeño */
-  margin-left: 3px;
-}
-
-
-
 
 /* Cabecera con el título */
 header {
