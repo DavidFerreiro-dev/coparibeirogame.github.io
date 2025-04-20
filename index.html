@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adivina el Equipo de la Copa Ribeiro</title>
+  <link rel="stylesheet" href="style.css">
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ADIVINA EL EQUIPO POR SU JUGADOR EN LA COPA RIBEIRO</h1>
+  </header>
+  
+  <div class="container">
+    <!-- Panel lateral - Puntuaciones -->
+    <div class="score-panel">
+      <h2 class="score-title">PUNTUACIONES</h2>
+      <div id="aciertos" class="contador score-item">
+        <span>Aciertos:</span> <span class="score-value">0</span>
+      </div>
+      <div id="fallos" class="contador score-item">
+        <span>Fallos:</span> <span class="score-value">0</span>
+      </div>
+      <div id="racha" class="contador score-item">
+        <span>Racha actual:</span> <span class="score-value">0</span>
+      </div>
+      <div class="racha-container">
+        <div id="rachaEmoji" class="racha"></div>
+      </div>
+    </div>
+    
+    <!-- Panel central - Juego -->
+    <div class="game-panel">
+      <div class="game-content">
+        <div id="nombreJugador"></div>
+        
+        <div class="control-container">
+          <select id="seleccionEquipo">
+            <option value="">Selecciona el equipo...</option>
+            <!-- Equipos de Futsal -->
+            <option value="Aluminios Soto">Aluminios Soto</option>
+            <option value="A Ponte FS">A Ponte FS</option>
+            <option value="Aston Birra FC">Aston Birra FC</option>
+            <option value="DTT FS">DTT FS</option>
+            <option value="J Varela">J Varela</option>
+            <option value="Lodairo FS">Lodairo FS</option>
+            <option value="Mapfre Ribadavia">Mapfre Ribadavia</option>
+            <option value="O Lago FC">O Lago FC</option>
+            <option value="Palomitas">Palomitas</option>
+            <option value="Pirulona">Pirulona</option>
+            <option value="Young Boys">Young Boys</option>
+            <option value="room39">room39</option>
+            <option value="Vigo Futsal">Vigo Futsal</option>
+            <option value="Umtis FC">Umtis FC</option>
+          </select>
+          
+          <div class="button-container">
+            <button id="confirmarBtn">Confirmar</button>
+            <button id="siguienteBtn">Siguiente Jugador</button>
+          </div>
+        </div>
+        
+        <div id="resultado"></div>
+        
+        <div id="escudoContainer">
+          <img id="escudoEquipo" src="" alt="">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Panel lateral - Estadísticas - NUEVO -->
+    <div class="stats-panel" id="statsPanel">
+      <h2 class="stats-title">ESTADÍSTICAS DEL EQUIPO</h2>
+      <div class="stats-item">
+        <span class="stats-label">Nombre del Equipo:</span>
+        <span class="stats-value" id="statsNombre"></span>
+      </div>
+      <div class="stats-item">
+        <span class="stats-label">Goles a Favor:</span>
+        <span class="stats-value" id="statsGolesFavor"></span>
+      </div>
+      <div class="stats-item">
+        <span class="stats-label">Goles en Contra:</span>
+        <span class="stats-value" id="statsGolesContra"></span>
+      </div>
+      <div class="stats-item">
+        <span class="stats-label">Grupo:</span>
+        <span class="stats-value" id="statsGrupo"></span>
+      </div>
+      <div class="stats-item">
+        <span class="stats-label">Posición en Grupo:</span>
+        <span class="stats-value" id="statsPosicionGrupo"></span>
+      </div>
+      <div class="stats-item">
+        <span class="stats-label">Resultado Final:</span>
+        <span class="stats-value" id="statsResultadoFinal"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="links-container">
+    <a href="https://challenge.place/c/67d95189341f17632f136e05" target="_blank">
+      <button id="irChallengeBtn">Ir a Challenge Place</button>
+    </a>
+    <a href="https://www.instagram.com/coparibeiro/" target="_blank">
+      <button id="irInstagramBtn">Ir a Instagram</button>
+    </a>
+  </div>
+  
+  
+
+  <script>
+    const jugadores = [
+      { nombre: "Iker González Fernández", equipo: "Lodairo FS" },
+      { nombre: "Bruno Balseiro Casas", equipo: "Lodairo FS" },
+      { nombre: "Unai Fírvida Moure", equipo: "Lodairo FS" },
+      { nombre: "Brais Francisco Fírvida", equipo: "Lodairo FS" },
+      { nombre: "Airas Rozas López", equipo: "Lodairo FS" },
+      { nombre: "Nuno Rozas López", equipo: "Lodairo FS" },
+      { nombre: "Andoni González de Albéniz", equipo: "Lodairo FS" },
+      { nombre: "Juan González de Castro", equipo: "Lodairo FS" },
+      { nombre: "Daniel Sobrino González", equipo: "Lodairo FS" },
+      { nombre: "Anxo Fírvida Vila", equipo: "Lodairo FS" },
+      { nombre: "Yago Feijoo Vázquez", equipo: "Lodairo FS" },
+      { nombre: "Xaco", equipo: "room39" },
+      { nombre: "Nico", equipo: "room39" },
+      { nombre: "Torres", equipo: "room39" },
+      { nombre: "Luki", equipo: "room39" },
+      { nombre: "Diego", equipo: "room39" },
+      { nombre: "Dris", equipo: "room39" },
+      { nombre: "Cane", equipo: "room39" },
+      { nombre: "Troiti", equipo: "room39" },
+      { nombre: "Adonai Gabarris Montoya", equipo: "Palomitas" },
+      { nombre: "Angel Borja Gabarri", equipo: "Palomitas" },
+      { nombre: "Angel Jimenez Gabarri", equipo: "Palomitas" },
+      { nombre: "Anxo Vila", equipo: "Palomitas" },
+      { nombre: "Avelino Gabarris Jimenez", equipo: "Palomitas" },
+      { nombre: "Lalo Mangana", equipo: "Palomitas" },
+      { nombre: "Marcos Penin", equipo: "Palomitas" },
+      { nombre: "Miqueas Gabarri Montoya", equipo: "Palomitas" },
+      { nombre: "Pablo Moreiro", equipo: "Palomitas" },
+      { nombre: "Raúl González", equipo: "Palomitas" },
+      { nombre: "Samuel Ferraz", equipo: "Palomitas" },
+      { nombre: "Santiago Rico", equipo: "Palomitas" },
+      { nombre: "Yerai", equipo: "Palomitas" },
+      { nombre: "Rodrigo Justo Perez", equipo: "Pirulona" },
+      { nombre: "Hugo Pérez Vales", equipo: "Pirulona" },
+      { nombre: "David Márquez Barreiro", equipo: "Pirulona" },
+      { nombre: "Gabriel Barros Cendón", equipo: "Pirulona" },
+      { nombre: "Luis Barros Cendón", equipo: "Pirulona" },
+      { nombre: "Rubén Álvarez Pérez", equipo: "Pirulona" },
+      { nombre: "Iván Gabian Otero", equipo: "Pirulona" },
+      { nombre: "Ismael Estévez Lale", equipo: "Pirulona" },
+      { nombre: "Camilo Vales Domínguez", equipo: "Pirulona" },
+      { nombre: "Santiago Prado Hermida", equipo: "Pirulona" },
+      { nombre: "Héctor Janeiro Mosquera", equipo: "Pirulona" },
+      { nombre: "Abraham Rodríguez Santamaría", equipo: "Aluminios Soto" },
+      { nombre: "Iván Merens", equipo: "Aluminios Soto" },
+      { nombre: "Mario Fernández", equipo: "Aluminios Soto" },
+      { nombre: "Gael Rodríguez Santamaría", equipo: "Aluminios Soto" },
+      { nombre: "Felipe Nicolás Pérez", equipo: "Aluminios Soto" },
+      { nombre: "Bruno Rodríguez Carnero", equipo: "Aluminios Soto" },
+      { nombre: "Brais Soto", equipo: "Aluminios Soto" },
+      { nombre: "Daniel Dávila", equipo: "Aluminios Soto" },
+      { nombre: "Iago Vázquez", equipo: "Aluminios Soto" },
+      { nombre: "Cristian", equipo: "Mapfre Ribadavia" },
+      { nombre: "Lage", equipo: "Mapfre Ribadavia" },
+      { nombre: "Álex", equipo: "Mapfre Ribadavia" },
+      { nombre: "Saúl", equipo: "Mapfre Ribadavia" },
+      { nombre: "Gulin", equipo: "Mapfre Ribadavia" },
+      { nombre: "Montero", equipo: "Mapfre Ribadavia" },
+      { nombre: "Cito", equipo: "Mapfre Ribadavia" },
+      { nombre: "Jorge", equipo: "Mapfre Ribadavia" },
+      { nombre: "Tako", equipo: "Mapfre Ribadavia" },
+      { nombre: "Ache", equipo: "Mapfre Ribadavia" },
+      { nombre: "Samu", equipo: "Mapfre Ribadavia" },
+      { nombre: "Iker", equipo: "Aston Birra FC" },
+      { nombre: "Tomás", equipo: "Aston Birra FC" },
+      { nombre: "Álvaro", equipo: "Aston Birra FC" },
+      { nombre: "Yago", equipo: "Aston Birra FC" },
+      { nombre: "Joan", equipo: "Aston Birra FC" },
+      { nombre: "Luis", equipo: "Aston Birra FC" },
+      { nombre: "Cava", equipo: "Aston Birra FC" },
+      { nombre: "Manuel", equipo: "Aston Birra FC" },
+      { nombre: "Álex", equipo: "Aston Birra FC" },
+      { nombre: "Raúl", equipo: "Aston Birra FC" },
+      { nombre: "Iker Ordóñez Fernández", equipo: "O Lago FC" },
+      { nombre: "Yago Rodríguez Caride", equipo: "O Lago FC" },
+      { nombre: "Alfonso Fumega Rodríguez", equipo: "O Lago FC" },
+      { nombre: "Iker González Crespo", equipo: "O Lago FC" },
+      { nombre: "Aleixo Iglesias Fernández", equipo: "O Lago FC" },
+      { nombre: "Ismael Castro Coego", equipo: "O Lago FC" },
+      { nombre: "Miguel Díaz Valeiras", equipo: "O Lago FC" },
+      { nombre: "Diego Corral Rua", equipo: "O Lago FC" },
+      { nombre: "Alexandre Reboredo Fernández", equipo: "O Lago FC" },
+      { nombre: "Kevin Fernández", equipo: "Umtis FC" },
+      { nombre: "Lucas González", equipo: "Umtis FC" },
+      { nombre: "Izan Alonso", equipo: "Umtis FC" },
+      { nombre: "Iván López", equipo: "Umtis FC" },
+      { nombre: "Hugo Gómez", equipo: "Umtis FC" },
+      { nombre: "Hugo Fernández", equipo: "Umtis FC" },
+      { nombre: "Iker Raña", equipo: "Umtis FC" },
+      { nombre: "Rodrigo Crujeiras", equipo: "Umtis FC" },
+      { nombre: "Alfonso Montilva", equipo: "Umtis FC" },
+      { nombre: "Martín Fernández Álvarez", equipo: "J Varela" },
+      { nombre: "Miguel Barreiro Alvarez", equipo: "J Varela" },
+      { nombre: "Samuel Valeiras Barreiro", equipo: "J Varela" },
+      { nombre: "Pedro Saborido Lameiro", equipo: "J Varela" },
+      { nombre: "Xian Garrido Sande", equipo: "J Varela" },
+      { nombre: "Iker Ninahuaman Quintanilla", equipo: "J Varela" },
+      { nombre: "Eduardo Ocopio Ortega", equipo: "J Varela" },
+      { nombre: "Julio José Rodríguez López", equipo: "J Varela" },
+      { nombre: "Aldo Montes García", equipo: "J Varela" },
+      { nombre: "Diego Alonso Tejero", equipo: "J Varela" },
+      { nombre: "Hugo Gómez Estevez", equipo: "J Varela" },
+      { nombre: "Aitor Costas", equipo: "Vigo Futsal" },
+      { nombre: "Andres Sestelo", equipo: "Vigo Futsal" },
+      { nombre: "Anxo Mosquera", equipo: "Vigo Futsal" },
+      { nombre: "Brais Fernandez", equipo: "Vigo Futsal" },
+      { nombre: "David Fernandez", equipo: "Vigo Futsal" },
+      { nombre: "Ismael Rodriguez", equipo: "Vigo Futsal"},
+      { nombre: "Maikel Monroy", equipo: "Vigo Futsal"},
+      { nombre: "Martin", equipo: "Vigo Futsal" },
+      { nombre: "Mathias Barrera", equipo: "Vigo Futsal" },
+      { nombre: "Yago Abraldes", equipo: "Vigo Futsal" },
+    ];
+
+    // URLs actualizadas de los escudos
+    const escudos = {
+      'Aluminios Soto': 'https://static.challengeplace.com/2025/4/5/21/competitor/998ca34b-28b8-447c-8779-32f5cd27d59c.jpg',
+      'A Ponte FS': 'https://static.challengeplace.com/2025/4/4/7/competitor/f1307877-6b61-4f1b-b6f9-6c4e4703a810.jpg',
+      'Aston Birra FC': 'https://static.challengeplace.com/2025/4/11/16/competitor/8268cd8e-ce6a-4881-af43-2a97fd015351.jpg',
+      'DTT FS': 'https://static.challengeplace.com/2025/3/28/9/competitor/2b65fc86-0ee0-4aec-bbfb-6026ec8b86bd.jpg',
+      'J Varela': 'https://static.challengeplace.com/2025/4/18/11/competitor/7ad4158c-20ab-47da-9471-22990122863a.jpg',
+      'Lodairo FS': 'https://static.challengeplace.com/2025/3/28/8/competitor/54118e1a-3573-477d-befb-aa2ae3194ea3.jpg',
+      'Mapfre Ribadavia': 'https://static.challengeplace.com/2025/4/18/11/competitor/a0c45a9c-621b-4a1b-90f6-d231cf055ea1.jpg',
+      'Mariscos Recio': 'https://static.challengeplace.com/2025/4/16/19/competitor/7b08c247-d4d8-480d-a229-11ebc80d5f5b.jpg',
+      'O Lago FC': 'https://static.challengeplace.com/2025/4/11/16/competitor/c41203ae-d3db-4fa8-8a77-6bed4d96b660.jpg',
+      'Palomitas': 'https://static.challengeplace.com/2025/4/15/10/competitor/5d0d7ed4-914f-4449-9e10-b297e1fba091.jpg',
+      'Pirulona': 'https://static.challengeplace.com/2025/4/4/7/competitor/e1d91b99-0a97-4cc2-9acb-abe9e244d922.jpg',
+      'Young Boys': 'https://static.challengeplace.com/2025/3/28/9/competitor/df7ca738-4e9e-4636-84a8-f6c609c64a2e.jpg',
+      'room39': 'https://static.challengeplace.com/2025/3/28/9/competitor/95050e6f-6786-46af-99cb-48f648568f1a.jpg',
+      'Vigo Futsal': 'https://static.challengeplace.com/2025/4/5/21/competitor/fd2a5550-afdb-4642-bc94-c138aa120bd5.jpg',
+      'Umtis FC': 'https://static.challengeplace.com/2025/4/12/10/competitor/2467ac12-516a-4242-8ab0-c1fce6bb5294.jpg'
+    };
+    
+    // Estadísticas de equipos - NUEVO
+    const estadisticasEquipos = {
+      'Aluminios Soto': {
+        golesFavor: 9,
+        golesContra: 9,
+        grupo: 'Grupo C',
+        posicionGrupo: 'Tercero',
+        resultadoFinal: 'Subcampeones de la Fase B'
+      },
+      'A Ponte FS': {
+        golesFavor: 1,
+        golesContra: 6,
+        grupo: 'Grupo D',
+        posicionGrupo: 'Cuarto',
+        resultadoFinal: 'Eliminados en Fase de Grupos'
+      },
+      'Aston Birra FC': {
+        golesFavor: 1,
+        golesContra: 6,
+        grupo: 'Grupo A',
+        posicionGrupo: 'Tercero',
+        resultadoFinal: 'Eliminados en Semifinales de la Fase B'
+      },
+      'DTT FS': {
+        golesFavor: 3,
+        golesContra: 3,
+        grupo: 'Grupo A',
+        posicionGrupo: 'Segundo',
+        resultadoFinal: 'Eliminados en Cuartos de Final'
+      },
+      'J Varela': {
+        golesFavor: 11,
+        golesContra: 11,
+        grupo: 'Grupo D',
+        posicionGrupo: 'Segundo',
+        resultadoFinal: '4º Puesto'
+      },
+      'Lodairo FS': {
+        golesFavor: 0,
+        golesContra: 10,
+        grupo: 'Grupo C',
+        posicionGrupo: 'Cuarto',
+        resultadoFinal: 'Eliminados en Fase de Grupos'
+      },
+      'Mapfre Ribadavia': {
+        golesFavor: 3,
+        golesContra: 4,
+        grupo: 'Grupo A',
+        posicionGrupo: 'Primero',
+        resultadoFinal: 'Eliminados en Cuartos de Final'
+      },
+      'O Lago FC': {
+        golesFavor: 4,
+        golesContra: 10,
+        grupo: 'Grupo B',
+        posicionGrupo: 'Segundo',
+        resultadoFinal: 'Eliminados en Cuartos de Final'
+      },
+      'Palomitas': {
+        golesFavor: 9,
+        golesContra: 6,
+        grupo: 'Grupo B',
+        posicionGrupo: 'Primero',
+        resultadoFinal: 'Eliminados en Cuartos de Final'
+      },
+      'Pirulona': {
+        golesFavor: 12,
+        golesContra: 9,
+        grupo: 'Grupo D',
+        posicionGrupo: 'Primero',
+        resultadoFinal: 'Subcampeones'
+      },
+      'Umtis FC': {
+        golesFavor: 16,
+        golesContra: 6,
+        grupo: 'Grupo C',
+        posicionGrupo: 'Primero',
+        resultadoFinal: '3º Puesto'
+      },
+      'Vigo Futsal': {
+        golesFavor: 5,
+        golesContra: 10,
+        grupo: 'Grupo B',
+        posicionGrupo: 'Tercero',
+        resultadoFinal: 'Eliminados en Semifinales de la Fase B'
+      },
+      'Young Boys': {
+        golesFavor: 19,
+        golesContra: 6,
+        grupo: 'Grupo C',
+        posicionGrupo: 'Segundo',
+        resultadoFinal: 'Campeones'
+      },
+      'room39': {
+        golesFavor: 14,
+        golesContra: 11,
+        grupo: 'Grupo D',
+        posicionGrupo: 'Tercero',
+        resultadoFinal: 'Campeones de la FASE B'
+      }
+    };
+
+    // Variables globales
+    let jugadorActual;
+    let aciertos = 0;
+    let fallos = 0;
+    let rachaActual = 0;
+    
+    // Elementos del DOM
+    const nombreJugadorEl = document.getElementById('nombreJugador');
+    const seleccionEquipoEl = document.getElementById('seleccionEquipo');
+    const confirmarBtn = document.getElementById('confirmarBtn');
+    const siguienteBtn = document.getElementById('siguienteBtn');
+    const resultadoEl = document.getElementById('resultado');
+    const escudoEquipoEl = document.getElementById('escudoEquipo');
+    const aciertoEl = document.getElementById('aciertos');
+    const falloEl = document.getElementById('fallos');
+    const rachaEl = document.getElementById('racha');
+    const rachaEmojiEl = document.getElementById('rachaEmoji');
+    const statsPanelEl = document.getElementById('statsPanel');
+    
+    // Elementos de estadísticas - NUEVO
+    const statsNombreEl = document.getElementById('statsNombre');
+    const statsGolesFavorEl = document.getElementById('statsGolesFavor');
+    const statsGolesContraEl = document.getElementById('statsGolesContra');
+    const statsGrupoEl = document.getElementById('statsGrupo');
+    const statsPosicionGrupoEl = document.getElementById('statsPosicionGrupo');
+    const statsResultadoFinalEl = document.getElementById('statsResultadoFinal');
+    
+    // Función para seleccionar un jugador aleatorio
+    function seleccionarJugadorAleatorio() {
+      const indiceAleatorio = Math.floor(Math.random() * jugadores.length);
+      jugadorActual = jugadores[indiceAleatorio];
+      nombreJugadorEl.innerText = jugadorActual.nombre;
+      seleccionEquipoEl.value = ''; // Resetear la selección
+      resultadoEl.innerText = '';
+      escudoEquipoEl.src = '';
+      confirmarBtn.style.display = 'inline-block';
+      siguienteBtn.style.display = 'none';
+      statsPanelEl.style.display = 'none'; // Ocultar panel de estadísticas
+    }
+    
+    // Función para mostrar estadísticas del equipo - NUEVO
+    function mostrarEstadisticasEquipo(nombreEquipo) {
+      const stats = estadisticasEquipos[nombreEquipo];
+      
+      if (stats) {
+        // Actualizar los valores en el panel de estadísticas
+        statsNombreEl.innerText = nombreEquipo;
+        statsGolesFavorEl.innerText = stats.golesFavor;
+        statsGolesContraEl.innerText = stats.golesContra;
+        statsGrupoEl.innerText = stats.grupo;
+        statsPosicionGrupoEl.innerText = stats.posicionGrupo;
+        statsResultadoFinalEl.innerText = stats.resultadoFinal;
+        
+        // Mostrar el panel de estadísticas
+        statsPanelEl.style.display = 'block';
+      } else {
+        // Ocultar el panel si no hay estadísticas disponibles
+        statsPanelEl.style.display = 'none';
+      }
+    }
+    
+    // Función para verificar la respuesta
+    function verificarRespuesta() {
+      const equipoSeleccionado = seleccionEquipoEl.value;
+      
+      if (!equipoSeleccionado) {
+        resultadoEl.innerText = "Por favor, selecciona un equipo";
+        return;
+      }
+      
+      const esCorrecta = jugadorActual.equipo === equipoSeleccionado;
+      
+      if (esCorrecta) {
+        resultadoEl.innerText = `¡Correcto! ${jugadorActual.nombre} es jugador de ${jugadorActual.equipo}`;
+        resultadoEl.style.color = '#4CAF50';
+        aciertos++;
+        rachaActual++;
+      } else {
+        resultadoEl.innerText = `Incorrecto. ${jugadorActual.nombre} no es jugador de ${equipoSeleccionado}, pertenece a ${jugadorActual.equipo}`;
+        resultadoEl.style.color = '#e74c3c';
+        fallos++;
+        rachaActual = 0;
+      }
+      
+      // Mostrar el escudo del equipo correcto
+      escudoEquipoEl.src = escudos[jugadorActual.equipo] || '';
+      
+      // Mostrar estadísticas del equipo correcto - NUEVO
+      mostrarEstadisticasEquipo(jugadorActual.equipo);
+      
+      actualizarContadores();
+      mostrarRacha();
+      
+      confirmarBtn.style.display = 'none';
+      siguienteBtn.style.display = 'inline-block';
+    }
+    
+    // Función para actualizar contadores
+    function actualizarContadores() {
+      aciertoEl.querySelector('.score-value').innerText = aciertos;
+      falloEl.querySelector('.score-value').innerText = fallos;
+      rachaEl.querySelector('.score-value').innerText = rachaActual;
+    }
+
+    // Función para mostrar el emoji y racha
+    function mostrarRacha() {
+      let rachaEmoji = '';
+      let rachaTexto = '';
+
+      if (rachaActual > 5) {
+        rachaEmoji = '🔥';
+        rachaTexto = `¡Gran Racha! ${rachaEmoji}`;
+      } else if (rachaActual > 0) {
+        rachaEmoji = '💪';
+        rachaTexto = `¡Continúa! ${rachaEmoji}`;
+      } else {
+        rachaEmoji = '😢';
+        rachaTexto = `¡Inténtalo de nuevo! ${rachaEmoji}`;
+      }
+
+      rachaEmojiEl.innerText = rachaTexto;
+    }
+    
+    // Event listeners
+    confirmarBtn.addEventListener('click', verificarRespuesta);
+    siguienteBtn.addEventListener('click', seleccionarJugadorAleatorio);
+    
+    // Mostrar estadísticas al seleccionar un equipo en el dropdown - NUEVO
+    seleccionEquipoEl.addEventListener('change', function() {
+      const equipoSeleccionado = this.value;
+      if (equipoSeleccionado) {
+        mostrarEstadisticasEquipo(equipoSeleccionado);
+      } else {
+        statsPanelEl.style.display = 'none';
+      }
+    });
+    
+    // Iniciar el juego
+    seleccionarJugadorAleatorio();
+  </script>
+</body>
+</html>
